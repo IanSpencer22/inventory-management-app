@@ -1,0 +1,149 @@
+/* General body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  /* Box styling */
+  .Box {
+    border: 1px solid #ccc;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  /* Stack and alignment */
+  .Stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Button styling */
+  .Button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .Button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Input and Select field styling */
+  input[type="text"], input[type="number"], input[type="date"], .Select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  .pantry-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Adjust button styles to align side by side */
+  .edit-button, .delete-button {
+    flex: 0 0 auto; /* Do not grow or shrink */
+    margin-right: 5px; /* Space between buttons */
+  }  
+
+/* Responsive adjustments for buttons and item layout */
+@media (max-width: 960px) {
+    #pantry-stack {
+        width: 800px;
+    }
+}
+
+@media (max-width: 840px) {
+    #pantry-stack {
+        width: 600px;
+    }
+}
+
+@media (max-width: 630px) {
+    #pantry-stack {
+      width: 430px; /* Adjust width to fit mobile screens */
+    }
+    .item-details, .item-name, .item-expiration {
+      text-align: center;
+    }
+    .item-name {
+      margin: auto !important; /* Force override any other styles */
+      padding-top: 10px;
+    }
+    .pantry-item {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .item-details {
+      order: 1;
+      width: 100%;
+    }
+
+    .edit-mode ~ .edit-button,
+    .edit-mode ~ .delete-button,
+    .edit-mode ~ .quantity-adjust-buttons {
+        display: none !important;
+    }
+
+    .edit-mode {
+        order: 2;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+  
+    .view-mode {
+      order: 3;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 10px 0;
+      padding-bottom: 20px;
+    }
+  
+    .quantity-adjust-buttons {
+      display: flex;
+      flex-direction: row !important; /* Align buttons horizontally */
+      justify-content: center;
+      order: 2;
+      margin-top: 30px;
+      margin-bottom: -30px;
+    }
+  
+    .edit-button {
+        order: 4;
+        width: auto; /* Adjust width to content */
+        display: flex;
+        position: relative;
+        left: -40%;
+        transform: translateX(-50%);
+        flex-direction: row; /* Ensure buttons are in a row */
+        justify-content: center; /* Center the buttons horizontally */
+    }
+
+    .delete-button {
+        order: 4;
+        width: auto; /* Adjust width to content */
+        display: flex;
+        position: relative;
+        left: 10%;
+        transform: translateY(-100%);
+        flex-direction: row; /* Ensure buttons are in a row */
+        justify-content: center; /* Center the buttons horizontally */
+    }
+  }
