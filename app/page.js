@@ -36,9 +36,11 @@ export default function Home() {
   const router = useRouter();
   const userSession = typeof window !== "undefined" ? sessionStorage.getItem('user') : null;
 
-  if (!user && !userSession) {
-    router.push('/landing-page');
-  }
+  useEffect(() => {
+    if (!user && !userSession) {
+      router.push('/landing-page');
+    }
+  }, [user, userSession]); // Only redirect when `user` or `userSession` changes
 
   const [pantry, setPantry] = useState([])
   const [open, setOpen] = useState(false)
