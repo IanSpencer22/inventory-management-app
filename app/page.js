@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Box, Stack, Typography, Button, Modal, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { firestore } from "@/firebase/config";
 import { collection, query, getDocs, getDoc, doc, setDoc, deleteDoc } from "firebase/firestore";
@@ -59,15 +59,16 @@ export default function Home() {
   useEffect(() => {
     const quantities = {};
     const categories = {};
+    const expirations = { ...itemExpiration };
     pantry.forEach(item => {
       quantities[item.name] = item.count;
       categories[item.name] = item.category;
-      itemExpiration[item.name] = item.expiration;
+      expirations[item.name] = item.expiration;
     });
     setItemQuantities(quantities);
     setItemCategory(categories);
-    setItemExpiration(itemExpiration);
-  }, [pantry]);
+    setItemExpiration(expirations);
+  }, [pantry, itemExpiration]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -80,9 +81,8 @@ export default function Home() {
 
   const handleQuantityChange = async (name, value) => {
     const updatedQuantities = { ...itemQuantities, [name]: value };
-    setItemQuantities(updatedQuantities); // Update local state immediately
+    setItemQuantities(updatedQuantities);
 
-    // Update Firestore
     const userPantryPath = `users/${user.uid}/pantry`;
     const docRef = doc(firestore, userPantryPath, name);
     const itemData = {
@@ -91,17 +91,16 @@ export default function Home() {
       expiration: itemExpiration[name] ? new Date(itemExpiration[name] + 'T00:00').toISOString() : null
     };
 
-    await setDoc(docRef, itemData); // Firestore update
-    // Consider removing updatePantry call here if it causes state inconsistency
+    await setDoc(docRef, itemData);
   };
 
   const toggleEditMode = (name) => {
     setEditMode(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
-  const updatePantry = async () => {
-    if (!user) return; // Ensure there is a user logged in
-    const userPantryPath = `users/${user.uid}/pantry`; // Path to user-specific pantry
+  const updatePantry = useCallback(async () => {
+    if (!user) return;
+    const userPantryPath = `users/${user.uid}/pantry`;
     const snapshot = query(collection(firestore, userPantryPath));
     const docs = await getDocs(snapshot);
     const pantryList = [];
@@ -109,31 +108,31 @@ export default function Home() {
       pantryList.push({
         name: doc.id,
         ...doc.data(),
-        expiration: doc.data().expiration ? new Date(doc.data().expiration).toISOString().split('T')[0] : null // Ensure date is formatted correctly when fetched
+        expiration: doc.data().expiration ? new Date(doc.data().expiration).toISOString().split('T')[0] : null
       });
     });
     console.log(pantryList);
     setPantry(pantryList);
-  }
+  }, [user]);
 
   useEffect(() => {
     updatePantry()
   }, []);
 
   const addItem = async () => {
-    if (!user) return; // Ensure there is a user logged in
-    const normalizedItemName = itemName.toLowerCase(); // Normalize the item name to lowercase
+    if (!user) return;
+    const normalizedItemName = itemName.toLowerCase();
     const userPantryPath = `users/${user.uid}/pantry`;
     const docRef = doc(collection(firestore, userPantryPath), normalizedItemName);
     const docSnap = await getDoc(docRef);
 
-    console.log("Category State:", itemCategory); // Debug: Log the entire category state
-    console.log("Item Name for Category:", itemName); // Debug: Log the item name used for category
+    console.log("Category State:", itemCategory);
+    console.log("Item Name for Category:", itemName);
 
-    const itemCategoryValue = itemCategory[itemName] || 'default'; // Check if the category is set correctly
+    const itemCategoryValue = itemCategory[itemName] || 'default';
 
     const itemExpirationValue = itemExpiration[itemName] ? new Date(itemExpiration[itemName]).toISOString() : null;
-    const inputQuantity = parseInt(itemQuantities[itemName], 10) || 0; // Get the input quantity and parse it as an integer
+    const inputQuantity = parseInt(itemQuantities[itemName], 10) || 0;
 
     const itemData = {
       count: docSnap.exists() ? docSnap.data().count + inputQuantity : inputQuantity,
@@ -147,11 +146,11 @@ export default function Home() {
   }
 
   const removeItem = async (itemName) => {
-    if (!user) return; // Ensure there is a user logged in
+    if (!user) return;
     const userPantryPath = `users/${user.uid}/pantry`;
     const docRef = doc(collection(firestore, userPantryPath), itemName);
-    await deleteDoc(docRef); // Completely delete the document
-    await updatePantry(); // Update the local state to reflect the change
+    await deleteDoc(docRef);
+    await updatePantry();
   }
 
   const filteredPantry = pantry
@@ -184,9 +183,8 @@ export default function Home() {
       setHasMoreItems(false);
       return;
     }
-    // Simulate an API call
     setTimeout(() => {
-      setItemsPerPage(itemsPerPage + 10); // Load 10 more items
+      setItemsPerPage(itemsPerPage + 10);
     }, 1500);
   };
 
@@ -194,17 +192,17 @@ export default function Home() {
     const updateExpirationDates = async () => {
       const userPantryPath = `users/${user.uid}/pantry`;
       const updates = Object.entries(itemExpiration).map(async ([itemName, expirationDate]) => {
-        if (expirationDate) { // Check if there's a date to update
+        if (expirationDate) {
           const docRef = doc(firestore, userPantryPath, itemName);
           const updatedData = {
-            expiration: new Date(expirationDate + 'T00:00').toISOString() // Ensure correct date format
+            expiration: new Date(expirationDate + 'T00:00').toISOString()
           };
-          await setDoc(docRef, updatedData, { merge: true }); // Update Firestore, merging with existing data
+          await setDoc(docRef, updatedData, { merge: true });
         }
       });
 
       try {
-        await Promise.all(updates); // Execute all updates concurrently
+        await Promise.all(updates);
       } catch (error) {
         console.error("Failed to update expiration dates:", error);
       }
@@ -229,7 +227,7 @@ export default function Home() {
           variant="contained"
           color="primary"
           onClick={handleOpen}
-          sx={{ bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' } }} // Enhanced styling for the Add button
+          sx={{ bgcolor: 'green', '&:hover': { bgcolor: 'darkgreen' } }}
         >
           Add
         </Button>
@@ -240,7 +238,7 @@ export default function Home() {
             signOut(auth)
             sessionStorage.removeItem('user')
           }}
-          sx={{ marginLeft: 'auto' }} // Move the Log out button to the right
+          sx={{ marginLeft: 'auto' }}
         >
           Log out
         </Button>
