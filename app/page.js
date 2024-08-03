@@ -41,7 +41,12 @@ export default function Home() {
     if (!user && !userSession) {
       router.push('/landing-page');
     }
-  }, [user, userSession]); // Only redirect when `user` or `userSession` changes
+  }, [user, userSession]);
+
+  // Initialize Vercel Analytics
+  useEffect(() => {
+    Analytics.page();
+  }, []);
 
   const [pantry, setPantry] = useState([])
   const [open, setOpen] = useState(false)
@@ -119,7 +124,7 @@ export default function Home() {
 
   useEffect(() => {
     updatePantry();
-  }, [updatePantry]); // Include updatePantry in the dependency array
+  }, [updatePantry]);
 
   const addItem = async () => {
     if (!user) return;
@@ -192,7 +197,7 @@ export default function Home() {
 
   useEffect(() => {
     const updateExpirationDates = async () => {
-      if (!user) return; // Ensure user is not null
+      if (!user) return;
       const userPantryPath = `users/${user.uid}/pantry`;
       const updates = Object.entries(itemExpiration).map(async ([itemName, expirationDate]) => {
         if (expirationDate) {
@@ -212,7 +217,7 @@ export default function Home() {
     };
 
     updateExpirationDates();
-  }, [user, itemExpiration]); // Include user in the dependency array
+  }, [user, itemExpiration]);
 
   return (
     <Box
