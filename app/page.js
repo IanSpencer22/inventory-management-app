@@ -43,9 +43,12 @@ export default function Home() {
     }
   }, [user, userSession]);
 
-  // Initialize Vercel Analytics
   useEffect(() => {
-    Analytics.page();
+    try {
+      Analytics.page();
+    } catch (error) {
+      console.error("Failed to initialize analytics:", error);
+    }
   }, []);
 
   const [pantry, setPantry] = useState([])
