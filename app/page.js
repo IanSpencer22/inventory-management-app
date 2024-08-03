@@ -59,16 +59,15 @@ export default function Home() {
   useEffect(() => {
     const quantities = {};
     const categories = {};
-    const expirations = { ...itemExpiration };
     pantry.forEach(item => {
       quantities[item.name] = item.count;
       categories[item.name] = item.category;
-      expirations[item.name] = item.expiration;
+      itemExpiration[item.name] = item.expiration;
     });
     setItemQuantities(quantities);
     setItemCategory(categories);
-    setItemExpiration(expirations);
-  }, [pantry, itemExpiration]);
+    setItemExpiration(itemExpiration);
+  }, [pantry]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -116,8 +115,8 @@ export default function Home() {
   }, [user]);
 
   useEffect(() => {
-    updatePantry()
-  }, []);
+    updatePantry();
+  }, [updatePantry]); // Include updatePantry in the dependency array
 
   const addItem = async () => {
     if (!user) return;
@@ -190,6 +189,7 @@ export default function Home() {
 
   useEffect(() => {
     const updateExpirationDates = async () => {
+      if (!user) return; // Ensure user is not null
       const userPantryPath = `users/${user.uid}/pantry`;
       const updates = Object.entries(itemExpiration).map(async ([itemName, expirationDate]) => {
         if (expirationDate) {
@@ -209,7 +209,7 @@ export default function Home() {
     };
 
     updateExpirationDates();
-  }, [itemExpiration]);
+  }, [user, itemExpiration]); // Include user in the dependency array
 
   return (
     <Box
