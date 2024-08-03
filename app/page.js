@@ -21,7 +21,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '90vw',
   maxWidth: 400,
-  bgcolor: 'background.paper',
+  backgroundColor: '#1B1212',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
@@ -37,7 +37,7 @@ export default function Home() {
   const userSession = sessionStorage.getItem('user');
 
   if (!user && !userSession) {
-    router.push('/sign-in');
+    router.push('/landing-page');
   }
 
   const [pantry, setPantry] = useState([])

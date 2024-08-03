@@ -28,7 +28,7 @@ function SignUp() {
       justifyContent: 'center',
       alignItems: 'center',
       height: '100vh',
-      backgroundColor: '#f4f4f4',
+      backgroundColor: '#1B1212',
     },
     form: {
       padding: '20px',

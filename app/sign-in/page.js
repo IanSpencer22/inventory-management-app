@@ -51,7 +51,7 @@ function SignIn() {
       justifyContent: 'center',
       alignItems: 'center',
       height: '100vh',
-      backgroundColor: '#f4f4f4',
+      backgroundColor: '#1B1212',
     },
     form: {
       padding: '20px',
@@ -132,7 +132,7 @@ function SignIn() {
           </div>
         </button>
         <p style={{ textAlign: 'center', marginTop: '10px' }}>
-          Don't have an account? <a href="/sign-up" style={{ color: '#5c67f2', textDecoration: 'none' }}>Sign Up</a>
+          Don&apos;t have an account? <a href="/sign-up" style={{ color: '#5c67f2', textDecoration: 'none' }}>Sign Up</a>
         </p>
       </form>
     </div>
