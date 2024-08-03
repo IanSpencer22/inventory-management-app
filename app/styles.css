@@ -25,6 +25,18 @@
   background: #646ff5; /* Color of the thumb when hovered */
 }
 
+/* Hide scrollbar on mobile devices */
+@media (max-width: 840px) {
+  .scrollable-div::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for WebKit browsers */
+  }
+  
+  .scrollable-div {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
 /* General body styles */
 body {
     font-family: 'Arial', sans-serif;
