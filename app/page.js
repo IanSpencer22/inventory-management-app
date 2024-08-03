@@ -34,7 +34,7 @@ const style = {
 export default function Home() {
   const [user] = useAuthState(auth);
   const router = useRouter();
-  const userSession = sessionStorage.getItem('user');
+  const userSession = typeof window !== "undefined" ? sessionStorage.getItem('user') : null;
 
   if (!user && !userSession) {
     router.push('/landing-page');
