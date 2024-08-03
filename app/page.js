@@ -220,8 +220,11 @@ export default function Home() {
       flexDirection={"column"}
       alignItems={"center"}
       gap={2}
-      style={{ fontFamily: 'Arial, sans-serif', padding: '10px' }}
+      style={{ fontFamily: 'Arial, sans-serif', padding: '10px', backgroundColor: '#1B1212' }}
     >
+      <Typography sx={{ justifyContent: 'center', color: '#eef1ff' }}>
+          Logged in as: {user ? user.email : 'No user'}
+      </Typography>
       <Stack direction="row" spacing={2} sx={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <Button
           variant="contained"
@@ -295,7 +298,7 @@ export default function Home() {
         <Box
           width={"100%"}
           height={"100px"}
-          bgcolor={"#ADD8E6"}
+          bgcolor={"#646ff5"}
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
@@ -322,14 +325,20 @@ export default function Home() {
               variant="outlined"
               fullWidth
               onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ backgroundColor: '#eef1ff' }}
             />
             <Stack direction="row" spacing={2} width="100%">
               <FormControl fullWidth>
-                <InputLabel>Category</InputLabel>
+                <InputLabel
+                  style={{ color: '#717ff8', fontWeight: 'bold', transform: 'translate(10px, -18px)', fontSize: '14px' }}
+                >
+                  Category
+                </InputLabel>
                 <Select
                   value={selectedCategory}
                   label="Category"
                   onChange={(e) => setSelectedCategory(e.target.value)}
+                  style={{ backgroundColor: '#eef1ff' }}
                 >
                   {categories.map(category => (
                     <MenuItem key={category} value={category}>{category}</MenuItem>
@@ -337,11 +346,16 @@ export default function Home() {
                 </Select>
               </FormControl>
               <FormControl fullWidth>
-                <InputLabel>Sort By</InputLabel>
+                <InputLabel
+                  style={{ color: '#717ff8', fontWeight: 'bold', transform: 'translate(10px, -18px)', fontSize: '14px' }}
+                >
+                  Sort By
+                </InputLabel>
                 <Select
                   value={sortOrder}
                   label="Sort By"
                   onChange={(e) => setSortOrder(e.target.value)}
+                  style={{ backgroundColor: '#eef1ff' }}
                 >
                   <MenuItem value="A-Z">Alphabetical A-Z</MenuItem>
                   <MenuItem value="Z-A">Alphabetical Z-A</MenuItem>
@@ -358,7 +372,7 @@ export default function Home() {
                   className="pantry-item"
                   key={name}
                   width="100%"
-                  minHeight="120px"
+                  minHeight="100px"
                   display={"flex"}
                   justifyContent={"space-between"}
                   paddingX={5}
