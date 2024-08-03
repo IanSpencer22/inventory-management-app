@@ -1,9 +1,36 @@
+* {
+  border-radius: 5px;
+}
+
+/* Add to your styles.css */
+.scrollable-div {
+  overflow-y: auto;
+  height: 500px; /* Adjust based on your design */
+}
+
+/* Styling the scrollbar itself */
+.scrollable-div::-webkit-scrollbar {
+  width: 10px; /* Adjust the width of the scrollbar */
+}
+
+.scrollable-div::-webkit-scrollbar-track {
+  background: #dde3ff; /* Color of the track */
+}
+
+.scrollable-div::-webkit-scrollbar-thumb {
+  background: #64a9f5; /* Color of the thumb */
+}
+
+.scrollable-div::-webkit-scrollbar-thumb:hover {
+  background: #646ff5; /* Color of the thumb when hovered */
+}
+
 /* General body styles */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #007BFF;
   }
   
   /* Box styling */
@@ -20,6 +47,22 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+
+  .edit-mode {
+    width: 100%;
+    display: flex;
+    flex-direction: row !important;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+  .edit-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    margin: 10px;
   }
   
   /* Button styling */
@@ -58,6 +101,12 @@ body {
     margin-right: 5px; /* Space between buttons */
   }  
 
+  .edit-mode ~ .edit-button,
+    .edit-mode ~ .delete-button,
+    .edit-mode ~ .quantity-adjust-buttons {
+        display: none !important;
+    }
+
 /* Responsive adjustments for buttons and item layout */
 @media (max-width: 960px) {
     #pantry-stack {
@@ -66,12 +115,6 @@ body {
 }
 
 @media (max-width: 840px) {
-    #pantry-stack {
-        width: 600px;
-    }
-}
-
-@media (max-width: 630px) {
     #pantry-stack {
       width: 430px; /* Adjust width to fit mobile screens */
     }
@@ -91,19 +134,20 @@ body {
       order: 1;
       width: 100%;
     }
-
-    .edit-mode ~ .edit-button,
-    .edit-mode ~ .delete-button,
-    .edit-mode ~ .quantity-adjust-buttons {
-        display: none !important;
-    }
-
     .edit-mode {
         order: 2;
         width: 100%;
         display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
+        flex-direction: column !important; /* Stack sections vertically */
+        justify-content: center; /* Center align the sections */
+        align-items: stretch; /* Stretch items to use full width */
+        gap: 20px; /* Increase space between sections */
+    }
+
+    .edit-section {
+        width: 100%; /* Full width for better touch interaction */
+        margin: 10px 0; /* Add vertical margin for spacing */
+        align-items: center; /* Center align the content */
     }
   
     .view-mode {
@@ -145,5 +189,16 @@ body {
         transform: translateY(-100%);
         flex-direction: row; /* Ensure buttons are in a row */
         justify-content: center; /* Center the buttons horizontally */
+    }
+
+    /* Additional adjustments for inputs and labels for better readability */
+    input[type="text"], input[type="number"], input[type="date"], .Select {
+        width: 100%; /* Slightly less than full width for aesthetics */
+        margin: auto; /* Center the inputs */
+    }
+
+    .Button {
+        width: 90%; /* Match input width */
+        margin: 10px auto; /* Center and add margin */
     }
   }

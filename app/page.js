@@ -10,8 +10,8 @@ import { signOut } from 'firebase/auth';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
+import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
 import './styles.css';
 
 const style = {
@@ -253,21 +253,23 @@ export default function Home() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Stack direction={"column"} spacing={1.5}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">Add Item</Typography>
+          <Stack direction={"column"} spacing={2}>
+            <Typography id="modal-modal-title" variant="h6" component="h2" style={{ color: '#646ff5' }}>Add Item</Typography>
             <TextField
                 id="outlined-basic"
                 label="Item"
                 variant="outlined"
                 fullWidth
-                onChange={(e) => setItemName(e.target.value)}
+              onChange={(e) => setItemName(e.target.value)}
+              style={{ backgroundColor: '#eef1ff' }}
             />
             <TextField
                 id="outlined-category"
                 label="Category"
                 variant="outlined"
                 fullWidth
-                onChange={(e) => setItemCategory({ ...itemCategory, [itemName]: e.target.value })}
+              onChange={(e) => setItemCategory({ ...itemCategory, [itemName]: e.target.value })}
+              style={{ backgroundColor: '#eef1ff' }}
               />
               <Stack width={"100%"} direction={"row"} spacing={2}>
                 <TextField
@@ -276,25 +278,28 @@ export default function Home() {
                   type="number"
                   variant="outlined"
                   fullWidth
-                  onChange={(e) => setItemQuantities({ ...itemQuantities, [itemName]: e.target.value })}
-                />
+                onChange={(e) => setItemQuantities({ ...itemQuantities, [itemName]: e.target.value })}
+                style={{ backgroundColor: '#eef1ff' }}
+              />
                   <TextField
                   id="date-picker"
                   label="Expiration Date"
                   type="date"
                   defaultValue={itemExpiration[itemName] || ''}
-                  onChange={(e) => setItemExpiration({ ...itemExpiration, [itemName]: e.target.value })}
+                onChange={(e) => setItemExpiration({ ...itemExpiration, [itemName]: e.target.value })}
+                style={{ backgroundColor: '#eef1ff' }}
                   InputLabelProps={{
                     shrink: true,
+                    style: { color: '#717ff8', fontWeight: 'bold', transform: 'translate(8px, -18px)', fontSize: '14px' }
                   }}
                   fullWidth
                 />
               </Stack>
-            <Button variant="outlined" onClick={addItem}>Add</Button>
+            <Button variant="outlined" onClick={addItem} style={{ backgroundColor: '#60cc54', color: '#0d0f20' }}>Add</Button>
           </Stack>
         </Box>
       </Modal>
-      <Box border={"1px solid #333"}>
+      <Box>
         <Box
           width={"100%"}
           height={"100px"}
@@ -313,11 +318,12 @@ export default function Home() {
           hasMore={hasMoreItems}
           loader={<h4>Loading...</h4>}
           endMessage={
-            <p style={{ textAlign: 'center' }}>
+            <p style={{ textAlign: 'center', color: '#646ff5' }}>
               <b>You have seen all items</b>
             </p>
           }
           height={500}
+          className="scrollable-div"
         >
           <Stack id="pantry-stack" width="900px" spacing={2} overflow={"auto"}>
             <TextField
@@ -398,35 +404,41 @@ export default function Home() {
                     </Typography>
                   </Stack>
                   {editMode[name] ? (
-                    <Stack className="edit-mode" direction={"column"} spacing={2} alignItems={"center"} justifyContent={"center"}>
-                      <Typography variant={"h2"} fontSize={"20px"}>Quantity:</Typography>
-                      <TextField
-                        type="number"
-                        value={itemQuantities[name] || 0}
-                        onChange={(e) => handleQuantityChange(name, e.target.value)}
-                        onBlur={() => handleQuantityChange(name, itemQuantities[name])}
-                        style={{ width: "100px", verticalAlign: "middle" }}
-                      />
-                      <Typography variant={"h2"} fontSize={"20px"}>Category:</Typography>
-                      <TextField
-                        value={itemCategory[name] || ''}
-                        onChange={(e) => setItemCategory({ ...itemCategory, [name]: e.target.value })}
-                        onBlur={() => handleQuantityChange(name, itemQuantities[name])}
-                        style={{ width: "100px", verticalAlign: "middle" }}
-                      />
-                      <Typography variant={"h2"} fontSize={"20px"}>Expiration Date:</Typography>
-                      <TextField
-                        type="date"
-                        value={itemExpiration[name] ? (new Date(itemExpiration[name]).getTime() ? new Date(itemExpiration[name]).toISOString().split('T')[0] : '') : ''}
-                        onChange={(e) => {
-                          setItemExpiration({ ...itemExpiration, [name]: e.target.value });
-                        }}
-                        onBlur={() => handleQuantityChange(name, itemQuantities[name])}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        style={{ width: "150px", verticalAlign: "middle" }}
-                      />
+                    <Stack className="edit-mode" direction={"row"} spacing={2} alignItems={"center"} justifyContent={"center"}>
+                      <Box className="edit-section">
+                        <Typography variant={"h2"} fontSize={"20px"}>Quantity:</Typography>
+                        <TextField
+                          type="number"
+                          value={itemQuantities[name] || 0}
+                          onChange={(e) => handleQuantityChange(name, e.target.value)}
+                          onBlur={() => handleQuantityChange(name, itemQuantities[name])}
+                          style={{ width: "100px" }}
+                        />
+                      </Box>
+                      <Box className="edit-section">
+                        <Typography variant={"h2"} fontSize={"20px"}>Category:</Typography>
+                        <TextField
+                          value={itemCategory[name] || ''}
+                          onChange={(e) => setItemCategory({ ...itemCategory, [name]: e.target.value })}
+                          onBlur={() => handleQuantityChange(name, itemQuantities[name])}
+                          style={{ width: "200px" }}
+                        />
+                      </Box>
+                      <Box className="edit-section">
+                        <Typography variant={"h2"} fontSize={"20px"}>Expiration Date:</Typography>
+                        <TextField
+                          type="date"
+                          value={itemExpiration[name] ? (new Date(itemExpiration[name]).getTime() ? new Date(itemExpiration[name]).toISOString().split('T')[0] : '') : ''}
+                          onChange={(e) => {
+                            setItemExpiration({ ...itemExpiration, [name]: e.target.value });
+                          }}
+                          onBlur={() => handleQuantityChange(name, itemQuantities[name])}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          style={{ width: "150px" }}
+                        />
+                      </Box>
                       <Button variant="contained" onClick={() => { handleQuantityChange(name, itemQuantities[name]); toggleEditMode(name); }}>Save</Button>
                     </Stack>
                   ) : (
@@ -449,12 +461,12 @@ export default function Home() {
                       </Typography>
                     </Stack>
                   )}
-                  <Stack className="quantity-adjust-buttons" direction="column" spacing={0} sx={{ position: 'relative', top: '-25px', left: '5px' }}>
+                  <Stack className="quantity-adjust-buttons" direction="row" spacing={0} sx={{ position: 'relative', top: '-25px', left: '5px' }}>
                     <Button variant="text" onClick={() => handleQuantityChange(name, (itemQuantities[name] !== undefined ? itemQuantities[name] : count) + 1)} sx={{ minWidth: '30px', height: '30px', padding: '6px' }}>
-                      <ArrowDropUpIcon sx={{ fontSize: '2rem' }} />
+                      <ArrowCircleUpRoundedIcon sx={{ fontSize: '2rem' }} />
                     </Button>
                     <Button variant="text" onClick={() => handleQuantityChange(name, Math.max((itemQuantities[name] !== undefined ? itemQuantities[name] : count) - 1, 0))} sx={{ minWidth: '30px', height: '30px', padding: '6px' }}>
-                      <ArrowDropDownIcon sx={{ fontSize: '2rem' }} />
+                      <ArrowCircleDownRoundedIcon sx={{ fontSize: '2rem' }} />
                     </Button>
                   </Stack>
                   <Button className="edit-button" variant="text" sx={{ marginLeft: 'auto', marginRight: '5px' }} onClick={() => toggleEditMode(name)}>
