@@ -13,6 +13,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
 import './styles.css';
+import { Gtag } from 'react-gtag';
+
+// Initialize Google Analytics
+Gtag.init({ trackingId: 'G-LKV8P5GEB7', debug: true });
 
 const style = {
   position: 'absolute',
@@ -212,6 +216,20 @@ export default function Home() {
 
     updateExpirationDates();
   }, [user, itemExpiration]); // Include user in the dependency array
+
+  useEffect(() => {
+    // Track page views on route change
+    const handleRouteChange = (url) => {
+      Gtag.pageview(url);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup subscription on unmount
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <Box
