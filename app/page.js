@@ -12,7 +12,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
-import { Analytics } from "@vercel/analytics/react"
 import './styles.css';
 
 const style = {
@@ -42,14 +41,6 @@ export default function Home() {
       router.push('/landing-page');
     }
   }, [user, userSession]);
-
-  useEffect(() => {
-    try {
-      Analytics.page();
-    } catch (error) {
-      console.error("Failed to initialize analytics:", error);
-    }
-  }, []);
 
   const [pantry, setPantry] = useState([])
   const [open, setOpen] = useState(false)

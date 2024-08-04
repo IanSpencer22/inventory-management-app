@@ -2,6 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { FaGithub, FaLinkedin, FaGlobe } from 'react-icons/fa';
+import { Analytics } from "@vercel/analytics/react"
 
 function LandingPage() {
   const router = useRouter();
@@ -45,6 +46,7 @@ function LandingPage() {
   return (
     <div style={styles.container}>
       <div style={styles.content}>
+        <Analytics />
         <div style={{ textAlign: 'center' }}>
           <h1 style={{ padding: '20px', color: 'white' }}>Welcome to the Inventory Management App</h1>
           <p style={{ padding: '20px', color: 'white' }}>Manage your inventory or pantry efficiently and effortlessly with our easy-to-use interface.</p>
