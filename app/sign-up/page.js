@@ -2,10 +2,12 @@
 import { useState } from 'react';
 import { auth } from '../../firebase/config';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/navigation';
 
 function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
 
@@ -13,13 +15,17 @@ function SignUp() {
     event.preventDefault();
     try {
       const res = await createUserWithEmailAndPassword(email, password);
-      console.log({ res });
+      if (!res.user) {
+        return;
+      }
       sessionStorage.setItem('user', true);
       setEmail('');
       setPassword('');
+      router.push('/');
     } catch (error) {
       console.error(error);
-    }
+      alert('Failed to create an account. ' + 'Please try again with a different email address.');
+    };
   };
 
   const styles = {

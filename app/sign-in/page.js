@@ -20,13 +20,18 @@ function SignIn() {
     }
     try {
       const res = await signInWithEmailAndPassword(email, password);
-        console.log({ res });
-        sessionStorage.setItem('user', true);
-        setEmail('');
-        setPassword('');
-        router.push('/');
+      if (!res.user) {
+        alert('No account found with this email. Please sign up.');
+        return;
+      }
+      console.log({ res });
+      sessionStorage.setItem('user', true);
+      setEmail('');
+      setPassword('');
+      router.push('/');
     } catch (error) {
       console.error(error);
+      alert('Login failed: ' + 'No account found with this email. Please sign up.');
     }
   };
 

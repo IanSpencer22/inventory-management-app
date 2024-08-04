@@ -128,7 +128,7 @@ body {
 
 @media (max-width: 840px) {
     #pantry-stack {
-      width: 430px; /* Adjust width to fit mobile screens */
+      width: 410px; /* Adjust width to fit mobile screens */
     }
     .item-details, .item-name, .item-expiration {
       text-align: center;

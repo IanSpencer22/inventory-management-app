@@ -131,18 +131,14 @@ export default function Home() {
 
   const addItem = async () => {
     if (!user) return;
-    const normalizedItemName = itemName.toLowerCase();
+    const normalizedItemName = itemName.trim().toLowerCase();
     const userPantryPath = `users/${user.uid}/pantry`;
     const docRef = doc(collection(firestore, userPantryPath), normalizedItemName);
     const docSnap = await getDoc(docRef);
 
-    console.log("Category State:", itemCategory);
-    console.log("Item Name for Category:", itemName);
-
-    const itemCategoryValue = itemCategory[itemName] || 'default';
-
-    const itemExpirationValue = itemExpiration[itemName] ? new Date(itemExpiration[itemName]).toISOString() : null;
-    const inputQuantity = parseInt(itemQuantities[itemName], 10) || 0;
+    const itemCategoryValue = itemCategory[normalizedItemName] || 'default';
+    const itemExpirationValue = itemExpiration[normalizedItemName] ? new Date(itemExpiration[normalizedItemName]).toISOString() : null;
+    const inputQuantity = parseInt(itemQuantities[normalizedItemName], 10) || 0;
 
     const itemData = {
       count: docSnap.exists() ? docSnap.data().count + inputQuantity : inputQuantity,
