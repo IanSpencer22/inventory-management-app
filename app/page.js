@@ -105,15 +105,19 @@ export default function Home() {
     const snapshot = query(collection(firestore, userPantryPath));
     const docs = await getDocs(snapshot);
     const pantryList = [];
+    const newCategories = {};
     docs.forEach((doc) => {
-      pantryList.push({
+      const item = {
         name: doc.id,
         ...doc.data(),
         expiration: doc.data().expiration ? new Date(doc.data().expiration).toISOString().split('T')[0] : null
-      });
+      };
+      pantryList.push(item);
+      newCategories[item.name] = item.category; // Update categories for each item
     });
     console.log(pantryList);
     setPantry(pantryList);
+    setItemCategory(newCategories); // Update the itemCategory state
   }, [user]);
 
   useEffect(() => {
@@ -128,14 +132,19 @@ export default function Home() {
     const docSnap = await getDoc(docRef);
 
     const itemCategoryValue = itemCategory[normalizedItemName] || 'default';
-    const itemExpirationValue = itemExpiration[normalizedItemName] ? new Date(itemExpiration[normalizedItemName]).toISOString() : null;
+    const itemExpirationValue = itemExpiration[normalizedItemName] ? new Date(itemExpiration[normalizedItemName] + 'T00:00').toISOString() : null;
     const inputQuantity = parseInt(itemQuantities[normalizedItemName], 10) || 0;
 
+    // Check if docSnap.data().count is a number, otherwise use 0
+    const existingCount = typeof docSnap.data()?.count === 'number' ? docSnap.data().count : 0;
+
     const itemData = {
-      count: docSnap.exists() ? docSnap.data().count + inputQuantity : inputQuantity,
+      count: existingCount + inputQuantity,
       category: itemCategoryValue,
       expiration: itemExpirationValue
     };
+
+    console.log('Item Data:', itemData);  // Log the final item data to verify
 
     await setDoc(docRef, itemData);
     await updatePantry();
@@ -455,7 +464,7 @@ export default function Home() {
                         color={"#666"}
                         textAlign={"center"}
                       >
-                        Category: {category ? (category.toString().charAt(0).toUpperCase() + category.toString().slice(1).toLowerCase()) : "No category"}
+                        Category: {itemCategory[name] ? (itemCategory[name].toString().charAt(0).toUpperCase() + itemCategory[name].toString().slice(1).toLowerCase()) : "No category"}
                       </Typography>
                     </Stack>
                   )}
